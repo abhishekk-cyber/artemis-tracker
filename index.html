@@ -5,574 +5,262 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Artemis II Tracker</title>
   <style>
-    :root {
-      --bg: #07111f;
-      --panel: #0e1b2e;
-      --panel-2: #12233d;
-      --text: #eef4ff;
-      --muted: #9eb4d6;
-      --accent: #69b7ff;
-      --accent-2: #8df1ff;
-      --line: rgba(255,255,255,0.08);
-      --good: #8cf2c2;
-      --warn: #ffd479;
-    }
     * { box-sizing: border-box; }
     body {
       margin: 0;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-      background:
-        radial-gradient(circle at 20% 20%, rgba(105,183,255,0.18), transparent 22%),
-        radial-gradient(circle at 80% 10%, rgba(141,241,255,0.12), transparent 18%),
-        linear-gradient(180deg, #050b15, var(--bg));
-      color: var(--text);
-      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(180deg, #081120 0%, #030712 100%);
+      color: #f3f4f6;
     }
     .container {
-      max-width: 1280px;
+      max-width: 1200px;
       margin: 0 auto;
       padding: 24px;
     }
-    .hero {
-      display: flex;
-      justify-content: space-between;
-      gap: 16px;
-      align-items: end;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
+    h1 {
+      margin: 0 0 8px;
+      font-size: 2rem;
     }
-    .title h1 {
-      margin: 0;
-      font-size: clamp(1.8rem, 4vw, 3rem);
-      line-height: 1.05;
-      letter-spacing: -0.03em;
-    }
-    .title p {
-      margin: 10px 0 0;
-      color: var(--muted);
-      max-width: 760px;
-    }
-    .badges {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-    .badge {
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,0.03);
-      color: var(--muted);
-      padding: 10px 14px;
-      border-radius: 999px;
-      font-size: 0.9rem;
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: 1.55fr 0.95fr;
-      gap: 18px;
-    }
-    .panel {
-      background: linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.015));
-      border: 1px solid var(--line);
-      border-radius: 22px;
-      overflow: hidden;
-      box-shadow: 0 20px 80px rgba(0,0,0,0.28);
-      backdrop-filter: blur(14px);
-    }
-    .panel-inner { padding: 18px; }
-    .panel-title {
-      font-size: 1rem;
-      color: var(--muted);
-      margin: 0 0 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-    }
-    #spaceCanvas {
-      width: 100%;
-      display: block;
-      background:
-        radial-gradient(circle at 50% 50%, rgba(255,255,255,0.02), transparent 35%),
-        linear-gradient(180deg, #040912, #07111f);
-    }
-    .metrics {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 14px;
-    }
-    .metric {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: 16px;
-    }
-    .metric .label {
-      color: var(--muted);
-      font-size: 0.82rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-    .metric .value {
-      font-size: clamp(1.4rem, 3vw, 2rem);
-      margin-top: 10px;
-      font-weight: 700;
-      line-height: 1;
-    }
-    .metric .sub {
-      margin-top: 8px;
-      color: var(--muted);
-      font-size: 0.9rem;
+    .subtitle {
+      margin: 0 0 24px;
+      color: #9ca3af;
     }
     .controls {
-      display: grid;
+      display: flex;
       gap: 12px;
-    }
-    .control-block {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: 14px;
-    }
-    .control-block h3 {
-      margin: 0 0 8px;
-      font-size: 1rem;
-    }
-    .control-block p {
-      margin: 0 0 10px;
-      color: var(--muted);
-      font-size: 0.92rem;
-      line-height: 1.45;
-    }
-    .row {
-      display: flex;
-      gap: 10px;
       flex-wrap: wrap;
+      margin-bottom: 20px;
     }
-    input[type="text"], textarea, select {
-      width: 100%;
-      background: #091425;
-      color: var(--text);
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      padding: 11px 12px;
-      outline: none;
-    }
-    textarea {
-      min-height: 140px;
-      resize: vertical;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      font-size: 0.88rem;
-    }
-    button, .file-label {
-      appearance: none;
-      border: 0;
-      border-radius: 12px;
-      padding: 11px 14px;
+    button {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 12px 16px;
+      border-radius: 10px;
       cursor: pointer;
-      font-weight: 600;
-      background: linear-gradient(180deg, var(--accent), #4f98ff);
-      color: #04101f;
+      font-size: 0.95rem;
     }
-    button.secondary, .file-label.secondary {
-      background: rgba(255,255,255,0.06);
-      color: var(--text);
-      border: 1px solid var(--line);
+    button:hover { background: #1d4ed8; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 20px;
     }
-    input[type="file"] { display: none; }
+    .card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 18px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+    }
+    .label {
+      font-size: 0.9rem;
+      color: #9ca3af;
+      margin-bottom: 8px;
+    }
+    .value {
+      font-size: 1.7rem;
+      font-weight: bold;
+    }
+    .canvas-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 16px;
+    }
+    canvas {
+      width: 100%;
+      max-width: 100%;
+      background: radial-gradient(circle at top, #0f1f3a, #050814 70%);
+      border-radius: 14px;
+      display: block;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
     .status {
-      font-size: 0.92rem;
-      color: var(--muted);
-      padding-top: 4px;
-    }
-    .legend {
-      display: flex;
-      gap: 14px;
-      flex-wrap: wrap;
-      color: var(--muted);
-      font-size: 0.88rem;
-      margin-top: 12px;
-    }
-    .legend span::before {
-      content: "";
-      display: inline-block;
-      width: 10px;
-      height: 10px;
-      border-radius: 999px;
-      margin-right: 8px;
-      vertical-align: middle;
-    }
-    .legend .earth::before { background: #57b4ff; }
-    .legend .moon::before { background: #dbe7ff; }
-    .legend .path::before { background: #8df1ff; }
-    .legend .craft::before { background: #ffd479; }
-    .footnote {
       margin-top: 14px;
-      color: var(--muted);
-      font-size: 0.85rem;
-      line-height: 1.45;
+      color: #93c5fd;
+      font-size: 0.95rem;
     }
-    code { color: var(--accent-2); }
-    @media (max-width: 1024px) {
+    footer {
+      text-align: center;
+      margin-top: 30px;
+      color: #9ca3af;
+      font-size: 0.9rem;
+    }
+    @media (max-width: 900px) {
+      .grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 600px) {
       .grid { grid-template-columns: 1fr; }
+      h1 { font-size: 1.6rem; }
+      .value { font-size: 1.4rem; }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="hero">
-      <div class="title">
-        <h1>Artemis II Live Tracker UI</h1>
-        <p>A clean front end for visualizing Artemis II position, path, speed, distance from Earth, and distance from the Moon. This prototype works with a sample data set now, and it is ready to connect to a live JSON endpoint or an ephemeris export.</p>
-      </div>
-      <div class="badges">
-        <div class="badge">Mission view</div>
-        <div class="badge">Live endpoint ready</div>
-        <div class="badge">Static HTML</div>
-      </div>
+    <h1>🚀 Artemis II Tracker</h1>
+    <p class="subtitle">Public live demo showing simulated real-time spacecraft movement from Earth toward the Moon.</p>
+
+    <div class="controls">
+      <button id="sampleBtn">Load Current Frame</button>
+      <button id="playBtn">Start / Pause Live Demo</button>
     </div>
 
     <div class="grid">
-      <section class="panel">
-        <canvas id="spaceCanvas" width="900" height="640"></canvas>
-        <div class="panel-inner">
-          <div class="legend">
-            <span class="earth">Earth</span>
-            <span class="moon">Moon</span>
-            <span class="path">Trajectory</span>
-            <span class="craft">Orion</span>
-          </div>
-          <div class="footnote">
-            Coordinate space is normalized for visualization, not orbital scale. For production use, feed the tracker a live telemetry or ephemeris payload from your backend.
-          </div>
-        </div>
-      </section>
-
-      <aside class="panel">
-        <div class="panel-inner">
-          <h2 class="panel-title">Telemetry</h2>
-          <div class="metrics">
-            <div class="metric">
-              <div class="label">Speed</div>
-              <div id="speedValue" class="value">0 km/s</div>
-              <div class="sub">Current velocity</div>
-            </div>
-            <div class="metric">
-              <div class="label">Distance from Earth</div>
-              <div id="earthValue" class="value">0 km</div>
-              <div class="sub">Center to spacecraft</div>
-            </div>
-            <div class="metric">
-              <div class="label">Distance from Moon</div>
-              <div id="moonValue" class="value">0 km</div>
-              <div class="sub">Center to spacecraft</div>
-            </div>
-            <div class="metric">
-              <div class="label">Mission Elapsed</div>
-              <div id="metValue" class="value">00:00:00</div>
-              <div class="sub">Hours since launch</div>
-            </div>
-          </div>
-
-          <div class="controls">
-            <div class="control-block">
-              <h3>Quick start</h3>
-              <p>Use the sample mission data to preview the interface, then connect your own live endpoint.</p>
-              <div class="row">
-                <button id="sampleBtn">Load sample data</button>
-                <button id="playBtn" class="secondary">Play animation</button>
-              </div>
-              <div id="status" class="status">Status: waiting for data.</div>
-            </div>
-
-            <div class="control-block">
-              <h3>Connect a live endpoint</h3>
-              <p>Expected JSON format is shown below. Your backend can proxy NASA telemetry or convert NASA ephemeris files into this shape.</p>
-              <input id="endpointInput" type="text" placeholder="https://your-domain.com/api/artemis2/current" />
-              <div class="row" style="margin-top:10px;">
-                <button id="fetchBtn">Fetch endpoint</button>
-              </div>
-            </div>
-
-            <div class="control-block">
-              <h3>Paste JSON manually</h3>
-              <p>Useful while testing your API without changing the UI code.</p>
-              <textarea id="jsonInput" spellcheck="false">{
-  "timestamp": "2026-04-05T18:00:00Z",
-  "mission_elapsed_seconds": 360000,
-  "speed_km_s": 7.82,
-  "distance_earth_km": 352140,
-  "distance_moon_km": 42780,
-  "position": { "x": 0.84, "y": 0.42 },
-  "earth": { "x": 0.18, "y": 0.62 },
-  "moon": { "x": 0.78, "y": 0.36 },
-  "trajectory": [
-    { "x": 0.20, "y": 0.63 },
-    { "x": 0.29, "y": 0.60 },
-    { "x": 0.40, "y": 0.55 },
-    { "x": 0.54, "y": 0.50 },
-    { "x": 0.66, "y": 0.45 },
-    { "x": 0.75, "y": 0.40 },
-    { "x": 0.84, "y": 0.42 }
-  ]
-}</textarea>
-              <div class="row" style="margin-top:10px;">
-                <button id="applyJsonBtn">Apply JSON</button>
-                <label for="fileInput" class="file-label secondary">Load JSON file</label>
-                <input id="fileInput" type="file" accept="application/json" />
-              </div>
-            </div>
-
-            <div class="control-block">
-              <h3>Suggested backend response</h3>
-              <p>Return one object for the current frame, or include an array of frames if you want animation.</p>
-              <textarea readonly>{
-  "timestamp": "2026-04-05T18:00:00Z",
-  "mission_elapsed_seconds": 360000,
-  "speed_km_s": 7.82,
-  "distance_earth_km": 352140,
-  "distance_moon_km": 42780,
-  "position": { "x": 0.84, "y": 0.42 },
-  "earth": { "x": 0.18, "y": 0.62 },
-  "moon": { "x": 0.78, "y": 0.36 },
-  "trajectory": [{ "x": 0.20, "y": 0.63 }, { "x": 0.84, "y": 0.42 }]
-}</textarea>
-            </div>
-          </div>
-        </div>
-      </aside>
+      <div class="card">
+        <div class="label">Speed</div>
+        <div class="value" id="speedValue">0 km/s</div>
+      </div>
+      <div class="card">
+        <div class="label">Distance from Earth</div>
+        <div class="value" id="earthDistance">0 km</div>
+      </div>
+      <div class="card">
+        <div class="label">Distance from Moon</div>
+        <div class="value" id="moonDistance">0 km</div>
+      </div>
+      <div class="card">
+        <div class="label">Mission Time</div>
+        <div class="value" id="missionTime">0h 0m</div>
+      </div>
     </div>
+
+    <div class="canvas-card">
+      <canvas id="spaceCanvas" width="1100" height="620"></canvas>
+      <div class="status" id="statusText">Status: loading live demo view.</div>
+    </div>
+
+    <footer>Built by Abhi | Artemis II public demo</footer>
   </div>
 
   <script>
     const canvas = document.getElementById('spaceCanvas');
     const ctx = canvas.getContext('2d');
-
-    const speedValue = document.getElementById('speedValue');
-    const earthValue = document.getElementById('earthValue');
-    const moonValue = document.getElementById('moonValue');
-    const metValue = document.getElementById('metValue');
-    const statusEl = document.getElementById('status');
-
-    const endpointInput = document.getElementById('endpointInput');
-    const jsonInput = document.getElementById('jsonInput');
-    const fileInput = document.getElementById('fileInput');
-
-    let currentFrame = null;
-    let sampleFrames = [];
-    let animationIndex = 0;
+    const statusEl = document.getElementById('statusText');
     let animationTimer = null;
 
-    function formatKm(n) {
-      return new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(n) + ' km';
+    function formatMissionTime(seconds) {
+      const hours = Math.floor(seconds / 3600);
+      const minutes = Math.floor((seconds % 3600) / 60);
+      return `${hours}h ${minutes}m`;
     }
 
-    function formatKmS(n) {
-      return new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 }).format(n) + ' km/s';
-    }
+    function buildLiveFrame() {
+      const now = Date.now() / 1000;
 
-    function formatMET(seconds) {
-      const s = Math.max(0, Math.floor(seconds));
-      const h = String(Math.floor(s / 3600)).padStart(2, '0');
-      const m = String(Math.floor((s % 3600) / 60)).padStart(2, '0');
-      const sec = String(s % 60).padStart(2, '0');
-      return `${h}:${m}:${sec}`;
-    }
+      const earth = { x: 0.18, y: 0.62 };
+      const moon = { x: 0.78, y: 0.36 };
 
-    function toCanvasX(x) { return x * canvas.width; }
-    function toCanvasY(y) { return y * canvas.height; }
+      const orbitProgress = (now / 12) % 1;
+      const startX = earth.x;
+      const startY = earth.y;
+      const endX = moon.x;
+      const endY = moon.y;
 
-    function drawStars() {
-      for (let i = 0; i < 120; i++) {
-        const x = (Math.sin(i * 91.17) * 0.5 + 0.5) * canvas.width;
-        const y = (Math.cos(i * 57.83) * 0.5 + 0.5) * canvas.height;
-        const r = (i % 3) + 0.5;
-        ctx.beginPath();
-        ctx.arc(x, y, r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255,255,255,${0.15 + (i % 5) * 0.08})`;
-        ctx.fill();
+      const currentX = startX + (endX - startX) * orbitProgress;
+      const currentY = startY + (endY - startY) * orbitProgress - Math.sin(orbitProgress * Math.PI) * 0.12;
+
+      const trajectory = [];
+      const points = 50;
+
+      for (let i = 0; i <= points; i++) {
+        const t = (orbitProgress * i) / points;
+        const x = startX + (endX - startX) * t;
+        const y = startY + (endY - startY) * t - Math.sin(t * Math.PI) * 0.12;
+        trajectory.push({ x, y });
       }
+
+      return {
+        timestamp: new Date().toISOString(),
+        mission_elapsed_seconds: Math.floor((now * 8) % 864000),
+        speed_km_s: 7.8 + Math.sin(now / 8) * 0.18,
+        distance_earth_km: Math.floor(18000 + orbitProgress * 366000),
+        distance_moon_km: Math.floor(384000 - orbitProgress * 366000),
+        position: { x: currentX, y: currentY },
+        earth,
+        moon,
+        trajectory
+      };
     }
 
-    function drawBody(body, radius, fill, glow) {
-      const x = toCanvasX(body.x);
-      const y = toCanvasY(body.y);
-      const g = ctx.createRadialGradient(x, y, 3, x, y, radius * 2.5);
-      g.addColorStop(0, glow);
-      g.addColorStop(1, 'rgba(255,255,255,0)');
-      ctx.beginPath();
-      ctx.arc(x, y, radius * 2.2, 0, Math.PI * 2);
-      ctx.fillStyle = g;
-      ctx.fill();
-
+    function drawCircle(x, y, radius, label, fill) {
       ctx.beginPath();
       ctx.arc(x, y, radius, 0, Math.PI * 2);
       ctx.fillStyle = fill;
       ctx.fill();
-    }
 
-    function drawTrajectory(points) {
-      if (!points || points.length < 2) return;
-      ctx.beginPath();
-      points.forEach((p, i) => {
-        const x = toCanvasX(p.x);
-        const y = toCanvasY(p.y);
-        if (i === 0) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
-      });
-      ctx.strokeStyle = '#8df1ff';
-      ctx.lineWidth = 4;
-      ctx.shadowColor = 'rgba(141,241,255,0.55)';
-      ctx.shadowBlur = 14;
-      ctx.stroke();
-      ctx.shadowBlur = 0;
-    }
-
-    function drawCraft(position) {
-      const x = toCanvasX(position.x);
-      const y = toCanvasY(position.y);
-      ctx.beginPath();
-      ctx.arc(x, y, 8, 0, Math.PI * 2);
-      ctx.fillStyle = '#ffd479';
-      ctx.fill();
-      ctx.lineWidth = 2;
-      ctx.strokeStyle = '#fff3c2';
-      ctx.stroke();
-
-      ctx.beginPath();
-      ctx.arc(x, y, 17, 0, Math.PI * 2);
-      ctx.strokeStyle = 'rgba(255,212,121,0.25)';
-      ctx.stroke();
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '16px Arial';
+      ctx.fillText(label, x + radius + 8, y + 4);
     }
 
     function drawScene(frame) {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      drawStars();
-      drawTrajectory(frame.trajectory);
-      drawBody(frame.earth, 26, '#57b4ff', 'rgba(87,180,255,0.35)');
-      drawBody(frame.moon, 18, '#dbe7ff', 'rgba(219,231,255,0.22)');
-      drawCraft(frame.position);
 
-      ctx.fillStyle = 'rgba(255,255,255,0.7)';
-      ctx.font = '14px sans-serif';
-      ctx.fillText('Earth', toCanvasX(frame.earth.x) - 18, toCanvasY(frame.earth.y) + 48);
-      ctx.fillText('Moon', toCanvasX(frame.moon.x) - 18, toCanvasY(frame.moon.y) + 38);
-      ctx.fillText('Orion', toCanvasX(frame.position.x) + 12, toCanvasY(frame.position.y) - 10);
-    }
+      const earthX = frame.earth.x * canvas.width;
+      const earthY = frame.earth.y * canvas.height;
+      const moonX = frame.moon.x * canvas.width;
+      const moonY = frame.moon.y * canvas.height;
 
-    function updateMetrics(frame) {
-      speedValue.textContent = formatKmS(frame.speed_km_s || 0);
-      earthValue.textContent = formatKm(frame.distance_earth_km || 0);
-      moonValue.textContent = formatKm(frame.distance_moon_km || 0);
-      metValue.textContent = formatMET(frame.mission_elapsed_seconds || 0);
-    }
-
-    function applyFrame(frame, statusText = 'Telemetry loaded.') {
-      currentFrame = frame;
-      updateMetrics(frame);
-      drawScene(frame);
-      statusEl.textContent = 'Status: ' + statusText;
-    }
-
-    function buildSampleFrames() {
-      const earth = { x: 0.18, y: 0.62 };
-      const moon = { x: 0.78, y: 0.36 };
-      const route = [
-        { x: 0.20, y: 0.63 },
-        { x: 0.25, y: 0.61 },
-        { x: 0.31, y: 0.59 },
-        { x: 0.38, y: 0.57 },
-        { x: 0.46, y: 0.54 },
-        { x: 0.54, y: 0.50 },
-        { x: 0.61, y: 0.47 },
-        { x: 0.69, y: 0.43 },
-        { x: 0.75, y: 0.40 },
-        { x: 0.81, y: 0.39 },
-        { x: 0.84, y: 0.42 }
-      ];
-
-      return route.map((point, idx) => ({
-        timestamp: new Date(Date.UTC(2026, 3, 1, 18, 35, 0) + idx * 8 * 3600 * 1000).toISOString(),
-        mission_elapsed_seconds: idx * 28800,
-        speed_km_s: 10.9 - idx * 0.28,
-        distance_earth_km: 18000 + idx * 33400,
-        distance_moon_km: 380000 - idx * 33700,
-        position: point,
-        earth,
-        moon,
-        trajectory: route.slice(0, idx + 1)
-      }));
-    }
-
-    function safeParseJSON(text) {
-      try {
-        return JSON.parse(text);
-      } catch (err) {
-        alert('Could not parse JSON. Please check the format.');
-        throw err;
+      for (let i = 0; i < 80; i++) {
+        const starX = (i * 137) % canvas.width;
+        const starY = (i * 83) % canvas.height;
+        ctx.fillStyle = 'rgba(255,255,255,0.35)';
+        ctx.fillRect(starX, starY, 2, 2);
       }
+
+      if (frame.trajectory.length > 1) {
+        ctx.beginPath();
+        frame.trajectory.forEach((point, index) => {
+          const x = point.x * canvas.width;
+          const y = point.y * canvas.height;
+          if (index === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        });
+        ctx.strokeStyle = '#60a5fa';
+        ctx.lineWidth = 3;
+        ctx.stroke();
+      }
+
+      drawCircle(earthX, earthY, 28, 'Earth', '#2563eb');
+      drawCircle(moonX, moonY, 20, 'Moon', '#d1d5db');
+
+      const shipX = frame.position.x * canvas.width;
+      const shipY = frame.position.y * canvas.height;
+      drawCircle(shipX, shipY, 10, 'Artemis II', '#f97316');
+    }
+
+    function applyFrame(frame, message) {
+      document.getElementById('speedValue').textContent = `${frame.speed_km_s.toFixed(2)} km/s`;
+      document.getElementById('earthDistance').textContent = `${frame.distance_earth_km.toLocaleString()} km`;
+      document.getElementById('moonDistance').textContent = `${frame.distance_moon_km.toLocaleString()} km`;
+      document.getElementById('missionTime').textContent = formatMissionTime(frame.mission_elapsed_seconds);
+      drawScene(frame);
+      statusEl.textContent = `Status: ${message}`;
     }
 
     document.getElementById('sampleBtn').addEventListener('click', () => {
-      sampleFrames = buildSampleFrames();
-      animationIndex = sampleFrames.length - 1;
-      applyFrame(sampleFrames[animationIndex], 'Loaded sample data.');
+      const liveFrame = buildLiveFrame();
+      applyFrame(liveFrame, 'loaded current live demo frame.');
     });
 
     document.getElementById('playBtn').addEventListener('click', () => {
-      if (!sampleFrames.length) sampleFrames = buildSampleFrames();
       if (animationTimer) {
         clearInterval(animationTimer);
         animationTimer = null;
-        statusEl.textContent = 'Status: animation paused.';
+        statusEl.textContent = 'Status: live demo paused.';
         return;
       }
-      animationIndex = 0;
-      applyFrame(sampleFrames[animationIndex], 'Playing sample mission.');
+
+      applyFrame(buildLiveFrame(), 'running live demo.');
       animationTimer = setInterval(() => {
-        animationIndex += 1;
-        if (animationIndex >= sampleFrames.length) {
-          clearInterval(animationTimer);
-          animationTimer = null;
-          statusEl.textContent = 'Status: sample mission complete.';
-          return;
-        }
-        applyFrame(sampleFrames[animationIndex], 'Playing sample mission.');
-      }, 900);
+        applyFrame(buildLiveFrame(), 'running live demo.');
+      }, 2000);
     });
 
-    document.getElementById('applyJsonBtn').addEventListener('click', () => {
-      const parsed = safeParseJSON(jsonInput.value);
-      applyFrame(parsed, 'Loaded pasted JSON.');
-    });
-
-    fileInput.addEventListener('change', async (event) => {
-      const file = event.target.files?.[0];
-      if (!file) return;
-      const text = await file.text();
-      const parsed = safeParseJSON(text);
-      applyFrame(parsed, `Loaded ${file.name}.`);
-    });
-
-    document.getElementById('fetchBtn').addEventListener('click', async () => {
-      const url = endpointInput.value.trim();
-      if (!url) {
-        alert('Enter an endpoint URL first.');
-        return;
-      }
-      try {
-        statusEl.textContent = 'Status: fetching telemetry...';
-        const response = await fetch(url, { cache: 'no-store' });
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        const data = await response.json();
-        applyFrame(data, 'Fetched live endpoint successfully.');
-      } catch (err) {
-        console.error(err);
-        statusEl.textContent = 'Status: could not fetch endpoint. Check CORS, URL, or backend availability.';
-      }
-    });
-
-    sampleFrames = buildSampleFrames();
-    applyFrame(sampleFrames[sampleFrames.length - 1], 'Loaded default sample view.');
+    applyFrame(buildLiveFrame(), 'loaded default live demo view.');
   </script>
 </body>
 </html>
-<p>Built by Abhishek</p>
